@@ -3,17 +3,20 @@ import json
 import requests
 import jsonpath
 from utils.config_files import *
+ide=0
 def test_setup(setup):
     print("Executing")
 
+@pytest.mark.get
 def test_get_request():
-    
-   
     response = requests.get(getBooksurl())
-    print(response)
-    print(response.text)
+    #print(response)
+    #print(response.text)
     json_response = json.loads(response.text)
-    print(json_response)
+    assert response.status_code == 200
+    global ide
+    ide = int(json_response[-1].get('id'))
+    print(ide)
 
 # def test_get_request(get_url_fixture):
     
@@ -26,11 +29,11 @@ def test_get_request():
 
 
 def test_get_request_by_id(get_request_by_id_fixture):
-    id1 = input("enter id")
-    response1= get_request_by_id_fixture(id1)
+    #id1 = input("enter id")
+    response1= get_request_by_id_fixture(ide)
     print(response1)
     assert response1.status_code == 200
-
+@pytest.mark.post
 def test_post_request():
     response_post = requests.post(getBooksurl())
     print(response_post)
@@ -38,14 +41,14 @@ def test_post_request():
 
 
 def test_put_request(put_fixture):
-    id2 = input("enter id")
-    response_putt= put_fixture(id2)
+   # id2 = input("enter id")
+    response_putt= put_fixture(ide)
     print(response_putt)
     assert response_putt.status_code == 200
 
-def test_delete_request(put_fixture):
-    id3 = input("enter id")
+def test_delete_request():
+    #id3 = input("enter id")
     #url3= getBookurl()+id3
-    response_del= requests.delete(getBookurl()+id3)
+    response_del= requests.delete(getBookurl()+str(ide))
     print(response_del)
     assert response_del.status_code == 200

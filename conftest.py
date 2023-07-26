@@ -50,16 +50,16 @@ def pytest_html_report_title(report):
 
 @pytest.fixture(scope="function")
 def put_fixture():
-    def put_request(id2):
-        url2=getBookurl() +id2
+    def put_request(ide):
+        url2=getBookurl() +str(ide)
         response_put= requests.put(url2)
         return response_put
     return put_request
 
 @pytest.fixture(scope="function")
 def get_request_by_id_fixture():
-    def get_by_id_request(id1):
-        url1= getBookurl()+id1
+    def get_by_id_request(ide):
+        url1= getBookurl()+str(ide)
         response_get_by_id= requests.get(url1)
         return response_get_by_id
     return get_by_id_request
