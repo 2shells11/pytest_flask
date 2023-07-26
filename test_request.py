@@ -6,9 +6,8 @@ from utils.config_files import *
 def test_setup(setup):
     print("Executing")
 
+@pytest.mark.get
 def test_get_request():
-    
-   
     response = requests.get(getBooksurl())
     print(response)
     print(response.text)
@@ -30,7 +29,7 @@ def test_get_request_by_id(get_request_by_id_fixture):
     response1= get_request_by_id_fixture(id1)
     print(response1)
     assert response1.status_code == 200
-
+@pytest.mark.post
 def test_post_request():
     response_post = requests.post(getBooksurl())
     print(response_post)
