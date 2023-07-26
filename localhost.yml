@@ -1,0 +1,11 @@
+# ---
+# - name: remote demo
+#   hosts: localhost
+#   vars:
+#     ansible_connection: local
+#     ansible_python_interpreter: "{{ ansible_playbook_python }}"
+#   tasks:
+#     - name: pytest -v -s
+#       ansible.builtin.debug:
+#         msg: "{{ inventory_hostname }}"
+
