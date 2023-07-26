@@ -1,2 +1,3 @@
 pytest
 jsonpath
+pytest-html

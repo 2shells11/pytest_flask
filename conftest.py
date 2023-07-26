@@ -1,49 +1,52 @@
 import pytest
 import requests
+import os
+import sys 
+import platform
+import sysconfig
 from utils.config_files import *
 
-# #from config_files import parse_ini_file
-# # @pytest.fixture
-# # def var(request):
-# #     return request.config.getoption('book_url')
-# from configparser import ConfigParser
-
-# file = 'config.ini'
-# config = ConfigParser()
-# config.read(file)
-
-
-# books_url = config['pytest']['url_2']
-# book_url = config['pytest']['url_1']
-# print(book_url)
 
 @pytest.fixture(scope="session")
 def setup():
     #bb=request.config.getoption(url_1)
     print("Doing setup")
-    #bb=config.getoption('book_url')
     res=requests.get(getBooksurl())
     assert res.status_code == 200
     print("application is running")
     yield
     print("\nDoing teardown")
             
+def pytest_configure(config):
+    from pwd import getpwuid
+    from os import getuid
+
+    username = getpwuid(getuid())[0]
+    
+    from platform import python_version
+    py_version = python_version()
+    config._metadata = {
+        "user_name": username,
+        "python_version": py_version,
+        "sys.platform" : sys.platform,
+        "os.name"   : os.name,
+        "platform.system" : platform.system(),
+        "sysconfig" : sysconfig.get_platform(),
+        "platform": platform.machine()
+         
+    }
 
 
-# @pytest.fixture(scope="function")
-# def get_url_fixture():
-#     def get_request():
-#         response_get=requests.get(books_url)
-#         return response_get
-#     return get_request
-    # def get_url_request(id2):
-    #     url2= book_url+id2
-    #     response_put= requests.put(url2)
-
-    #     return response_put
-    # return get_url_request
+@pytest.mark.optionalhook
+def pytest_html_results_summary(prefix, summary, postfix):
+    from py.xml import html
+    prefix.extend([html.h3("Generating pytest report")])
+    summary.extend([html.h3("##########################")])
+    postfix.extend([html.h3("GENERATING RESULTS")])
 
 
+def pytest_html_report_title(report):
+    report.title = "Test Run"
 
 @pytest.fixture(scope="function")
 def put_fixture():

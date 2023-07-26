@@ -2,7 +2,7 @@ FROM python:3.6.1-alpine
 
 WORKDIR /pytest
 
-ADD ./pytest
+ADD . /pytest
 
 COPY requirements.txt .
 
@@ -12,5 +12,4 @@ RUN pip install -r requirements.txt
 
 COPY . .
 
-CMD ["pytest -v -s"]
 
